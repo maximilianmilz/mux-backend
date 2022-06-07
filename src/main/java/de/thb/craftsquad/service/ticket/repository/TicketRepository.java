@@ -2,6 +2,7 @@ package de.thb.craftsquad.service.ticket.repository;
 
 import static de.thb.craftsquad.service.ticket.jooq.tables.Ticket.TICKET;
 
+import de.thb.craftsquad.service.ticket.jooq.enums.Status;
 import de.thb.craftsquad.service.ticket.jooq.tables.records.TicketRecord;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
@@ -47,6 +48,22 @@ public class TicketRepository {
 
     public Optional<TicketRecord> delete(long id) {
         return context.delete(TICKET)
+                .where(TICKET.ID.eq(id))
+                .returning()
+                .fetchOptional();
+    }
+
+    public Optional<TicketRecord> updateStatus(Long id, Status status) {
+        return context.update(TICKET)
+                .set(TICKET.STATUS, status)
+                .where(TICKET.ID.eq(id))
+                .returning()
+                .fetchOptional();
+    }
+
+    public Optional<TicketRecord> assignTo(Long id, Long assignedTo) {
+        return context.update(TICKET)
+                .set(TICKET.ASSIGNED_TO, assignedTo)
                 .where(TICKET.ID.eq(id))
                 .returning()
                 .fetchOptional();
