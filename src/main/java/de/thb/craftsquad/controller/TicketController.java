@@ -88,4 +88,16 @@ public class TicketController extends BaseController {
         return ticketService.markTicketAsDone(id)
                 .orElseThrow(ResourceNotFoundException::new);
     }
+
+    @Operation(summary = "Create ticket.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200")
+    })
+    @PostMapping
+    public Ticket createTicket(@RequestBody Ticket ticket) {
+        // TODO get account from userAgent
+        long accountId = 1L;
+
+        return ticketService.create(accountId, ticket);
+    }
 }

@@ -1,7 +1,9 @@
 package de.thb.craftsquad.service.ticket;
 
 import de.thb.craftsquad.controller.exception.ResourceNotFoundException;
+import de.thb.craftsquad.service.account.model.Account;
 import de.thb.craftsquad.service.ticket.jooq.enums.Status;
+import de.thb.craftsquad.service.ticket.jooq.tables.records.TicketRecord;
 import de.thb.craftsquad.service.ticket.mapper.TicketMapper;
 import de.thb.craftsquad.service.ticket.model.Ticket;
 import de.thb.craftsquad.service.ticket.repository.TicketRepository;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,5 +63,17 @@ public class TicketService {
 
         return repository.update(id, record)
                 .map(TicketMapper::mapTicket);
+    }
+
+    public Ticket create(long accountId, Ticket ticket) {
+        TicketRecord record = new TicketRecord();
+
+        record.setTitle(ticket.getTitle());
+        record.setDescription(ticket.getDescription());
+        record.setCreated(LocalDateTime.now());
+        record.setStatus(Status.open);
+        record.setAccountId(accountId);
+
+        return TicketMapper.mapTicket(repository.create(record));
     }
 }
