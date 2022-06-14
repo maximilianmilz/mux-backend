@@ -6,6 +6,7 @@ package de.thb.craftsquad.service.ticket.jooq.tables;
 
 import de.thb.craftsquad.service.ticket.jooq.DefaultSchema;
 import de.thb.craftsquad.service.ticket.jooq.Keys;
+import de.thb.craftsquad.service.ticket.jooq.enums.Tag;
 import de.thb.craftsquad.service.ticket.jooq.tables.records.TicketTagRecord;
 
 import java.util.Arrays;
@@ -53,10 +54,9 @@ public class TicketTag extends TableImpl<TicketTagRecord> {
     public final TableField<TicketTagRecord, Long> TICKET_ID = createField(DSL.name("ticket_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * The column <code>ticket_tag.tag</code>.
      */
-    @Deprecated
-    public final TableField<TicketTagRecord, Object> TAG = createField(DSL.name("tag"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"public\".\"tag\"").nullable(false), this, "");
+    public final TableField<TicketTagRecord, Tag> TAG = createField(DSL.name("tag"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(de.thb.craftsquad.service.ticket.jooq.enums.Tag.class), this, "");
 
     private TicketTag(Name alias, Table<TicketTagRecord> aliased) {
         this(alias, aliased, null);
@@ -151,7 +151,7 @@ public class TicketTag extends TableImpl<TicketTagRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<Long, Object> fieldsRow() {
+    public Row2<Long, Tag> fieldsRow() {
         return (Row2) super.fieldsRow();
     }
 }

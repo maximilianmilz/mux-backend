@@ -1,15 +1,21 @@
 package de.thb.craftsquad.service.ticket.repository;
 
-import static de.thb.craftsquad.service.ticket.jooq.tables.Ticket.TICKET;
-
 import de.thb.craftsquad.service.ticket.jooq.enums.Status;
 import de.thb.craftsquad.service.ticket.jooq.tables.records.TicketRecord;
+import de.thb.craftsquad.service.ticket.mapper.TicketMapper;
+import de.thb.craftsquad.service.ticket.model.SortingType;
+import de.thb.craftsquad.service.ticket.model.Tag;
 import lombok.RequiredArgsConstructor;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+
+import static de.thb.craftsquad.service.ticket.jooq.tables.Ticket.TICKET;
+import static de.thb.craftsquad.service.ticket.jooq.tables.TicketTag.TICKET_TAG;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,12 +23,46 @@ public class TicketRepository {
 
     private final DSLContext context;
 
-    public List<TicketRecord> findAll(long seek, int limit) {
-        return context.selectFrom(TICKET)
+    public List<TicketRecord> findAll(Optional<String> searchTerm, Optional<List<Tag>> tags,
+                                      Optional<de.thb.craftsquad.service.ticket.model.Status> status,
+                                      Optional<Long> accountId, Optional<Long> assignedTo,
+                                      Optional<SortingType> sortingType) {
+        Condition condition = createFilterCondition(searchTerm, tags, status, accountId, assignedTo);
+
+        // TODO evaluate sorting type
+
+        return context.select().from(TICKET)
+                .leftJoin(TICKET_TAG).on(TICKET_TAG.TICKET_ID.eq(TICKET.ID))
+                .where(condition)
                 .orderBy(TICKET.ID.asc())
-                .seek(seek)
-                .limit(limit)
-                .fetch();
+                .fetchInto(TICKET);
+    }
+
+    private Condition createFilterCondition(Optional<String> searchTerm, Optional<List<Tag>> tags,
+                                            Optional<de.thb.craftsquad.service.ticket.model.Status> status,
+                                            Optional<Long> accountId, Optional<Long> assignedTo) {
+        Condition condition = DSL.noCondition();
+
+        if (searchTerm.isPresent()) {
+            condition = condition.and(TICKET.TITLE.contains(searchTerm.get()))
+                    .or(TICKET.DESCRIPTION.contains(searchTerm.get()));
+        }
+        if (tags.isPresent()) {
+            for (Tag tag : tags.get()) {
+                condition = condition.and(TICKET_TAG.TAG.eq(TicketMapper.mapTag(tag)));
+            }
+        }
+        if (status.isPresent()) {
+            condition = condition.and(TICKET.STATUS.eq(TicketMapper.mapStatus(status.get())));
+        }
+        if (accountId.isPresent()) {
+            condition = condition.and(TICKET.ACCOUNT_ID.eq(accountId.get()));
+        }
+        if (assignedTo.isPresent()) {
+            condition = condition.and(TICKET.ASSIGNED_TO.eq(assignedTo.get()));
+        }
+
+        return condition;
     }
 
     public Optional<TicketRecord> findById(long id) {

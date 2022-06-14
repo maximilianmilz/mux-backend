@@ -1,10 +1,11 @@
 package de.thb.craftsquad.service.ticket;
 
 import de.thb.craftsquad.controller.exception.ResourceNotFoundException;
-import de.thb.craftsquad.service.account.model.Account;
+import de.thb.craftsquad.service.ticket.model.Tag;
 import de.thb.craftsquad.service.ticket.jooq.enums.Status;
 import de.thb.craftsquad.service.ticket.jooq.tables.records.TicketRecord;
 import de.thb.craftsquad.service.ticket.mapper.TicketMapper;
+import de.thb.craftsquad.service.ticket.model.SortingType;
 import de.thb.craftsquad.service.ticket.model.Ticket;
 import de.thb.craftsquad.service.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,11 @@ public class TicketService {
 
     private final TicketRepository repository;
 
-    public List<Ticket> findAll(long seek, int limit) {
-        return repository.findAll(seek, limit)
+    public List<Ticket> findAll(Optional<String> searchTerm, Optional<List<Tag>> tags,
+                                Optional<de.thb.craftsquad.service.ticket.model.Status> status,
+                                Optional<Long> accountId, Optional<Long> assignedTo,
+                                Optional<SortingType> sortingType) {
+        return repository.findAll(searchTerm, tags, status, accountId, assignedTo, sortingType)
                 .stream()
                 .map(TicketMapper::mapTicket)
                 .toList();

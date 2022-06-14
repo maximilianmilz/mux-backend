@@ -1,6 +1,5 @@
 package de.thb.craftsquad.service.ticket.model;
 
-import de.thb.craftsquad.service.common.model.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Value;
