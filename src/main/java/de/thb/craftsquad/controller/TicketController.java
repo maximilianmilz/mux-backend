@@ -3,7 +3,6 @@ package de.thb.craftsquad.controller;
 import de.thb.craftsquad.controller.exception.ResourceNotFoundException;
 import de.thb.craftsquad.service.ticket.model.Tag;
 import de.thb.craftsquad.service.ticket.TicketService;
-import de.thb.craftsquad.service.ticket.model.SortingType;
 import de.thb.craftsquad.service.ticket.model.Status;
 import de.thb.craftsquad.service.ticket.model.Ticket;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,9 +33,8 @@ public class TicketController extends BaseController {
                                 @RequestParam(required = false) Optional<List<Tag>> tags,
                                 @RequestParam(required = false) Optional<Status> status,
                                 @RequestParam(required = false) Optional<Long> accountId,
-                                @RequestParam(required = false) Optional<Long> assignedTo,
-                                @RequestParam(required = false) Optional<SortingType> sortingType) {
-        return ticketService.findAll(searchTerm, tags, status, accountId, assignedTo, sortingType);
+                                @RequestParam(required = false) Optional<Long> assignedTo) {
+        return ticketService.findAll(searchTerm, tags, status, accountId, assignedTo);
     }
 
     @Operation(summary = "Update ticket.")

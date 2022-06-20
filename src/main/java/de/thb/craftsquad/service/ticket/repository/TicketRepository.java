@@ -3,7 +3,6 @@ package de.thb.craftsquad.service.ticket.repository;
 import de.thb.craftsquad.service.ticket.jooq.enums.Status;
 import de.thb.craftsquad.service.ticket.jooq.tables.records.TicketRecord;
 import de.thb.craftsquad.service.ticket.mapper.TicketMapper;
-import de.thb.craftsquad.service.ticket.model.SortingType;
 import de.thb.craftsquad.service.ticket.model.Tag;
 import lombok.RequiredArgsConstructor;
 import org.jooq.Condition;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static de.thb.craftsquad.service.account.jooq.tables.Account.ACCOUNT;
 import static de.thb.craftsquad.service.ticket.jooq.tables.Ticket.TICKET;
 import static de.thb.craftsquad.service.ticket.jooq.tables.TicketTag.TICKET_TAG;
 
@@ -25,14 +25,12 @@ public class TicketRepository {
 
     public List<TicketRecord> findAll(Optional<String> searchTerm, Optional<List<Tag>> tags,
                                       Optional<de.thb.craftsquad.service.ticket.model.Status> status,
-                                      Optional<Long> accountId, Optional<Long> assignedTo,
-                                      Optional<SortingType> sortingType) {
+                                      Optional<Long> accountId, Optional<Long> assignedTo) {
         Condition condition = createFilterCondition(searchTerm, tags, status, accountId, assignedTo);
-
-        // TODO evaluate sorting type
 
         return context.select().from(TICKET)
                 .leftJoin(TICKET_TAG).on(TICKET_TAG.TICKET_ID.eq(TICKET.ID))
+                .leftJoin(ACCOUNT).on(TICKET.ACCOUNT_ID.eq(ACCOUNT.ID))
                 .where(condition)
                 .orderBy(TICKET.ID.asc())
                 .fetchInto(TICKET);
@@ -107,5 +105,19 @@ public class TicketRepository {
                 .where(TICKET.ID.eq(id))
                 .returning()
                 .fetchOptional();
+    }
+
+    public List<TicketRecord> findTicketsOfAccount(long accountId) {
+        return context.selectFrom(TICKET)
+                .where(TICKET.ACCOUNT_ID.eq(accountId))
+                .orderBy(TICKET.CREATED.desc())
+                .fetch();
+    }
+
+    public List<TicketRecord> findProjectsOfUser(long accountId) {
+        return context.selectFrom(TICKET)
+                .where(TICKET.ASSIGNED_TO.eq(accountId))
+                .orderBy(TICKET.CREATED.desc())
+                .fetch();
     }
 }

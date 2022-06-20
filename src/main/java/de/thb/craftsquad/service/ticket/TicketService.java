@@ -5,7 +5,6 @@ import de.thb.craftsquad.service.ticket.model.Tag;
 import de.thb.craftsquad.service.ticket.jooq.enums.Status;
 import de.thb.craftsquad.service.ticket.jooq.tables.records.TicketRecord;
 import de.thb.craftsquad.service.ticket.mapper.TicketMapper;
-import de.thb.craftsquad.service.ticket.model.SortingType;
 import de.thb.craftsquad.service.ticket.model.Ticket;
 import de.thb.craftsquad.service.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +24,8 @@ public class TicketService {
 
     public List<Ticket> findAll(Optional<String> searchTerm, Optional<List<Tag>> tags,
                                 Optional<de.thb.craftsquad.service.ticket.model.Status> status,
-                                Optional<Long> accountId, Optional<Long> assignedTo,
-                                Optional<SortingType> sortingType) {
-        return repository.findAll(searchTerm, tags, status, accountId, assignedTo, sortingType)
+                                Optional<Long> accountId, Optional<Long> assignedTo) {
+        return repository.findAll(searchTerm, tags, status, accountId, assignedTo)
                 .stream()
                 .map(TicketMapper::mapTicket)
                 .toList();
@@ -79,5 +77,19 @@ public class TicketService {
         record.setAccountId(accountId);
 
         return TicketMapper.mapTicket(repository.create(record));
+    }
+
+    public List<Ticket> findTicketsOfAccount(long accountId) {
+        return repository.findTicketsOfAccount(accountId)
+                .stream()
+                .map(TicketMapper::mapTicket)
+                .toList();
+    }
+
+    public List<Ticket> findProjectsOfAccount(long accountId) {
+        return repository.findProjectsOfUser(accountId)
+                .stream()
+                .map(TicketMapper::mapTicket)
+                .toList();
     }
 }
