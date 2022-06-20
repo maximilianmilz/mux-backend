@@ -2,7 +2,7 @@ DROP TYPE IF EXISTS status;
 CREATE TYPE status AS ENUM ('open', 'assign','done');
 
 DROP TYPE IF EXISTS tag;
-CREATE TYPE tag AS ENUM ('electrician');
+CREATE TYPE tag AS ENUM ('sanitary', 'wood', 'metal', 'electric', 'moving', 'painter', 'renovation', 'gardening', 'montage');
 
 DROP TABLE IF EXISTS image;
 CREATE TABLE image
