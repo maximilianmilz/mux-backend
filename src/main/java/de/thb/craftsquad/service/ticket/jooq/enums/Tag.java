@@ -17,7 +17,23 @@ import org.jooq.Schema;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public enum Tag implements EnumType {
 
-    electrician("electrician");
+    sanitary("sanitary"),
+
+    wood("wood"),
+
+    metal("metal"),
+
+    electric("electric"),
+
+    moving("moving"),
+
+    painter("painter"),
+
+    renovation("renovation"),
+
+    gardening("gardening"),
+
+    montage("montage");
 
     private final String literal;
 

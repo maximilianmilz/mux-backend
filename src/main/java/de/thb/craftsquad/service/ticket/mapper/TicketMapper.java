@@ -40,7 +40,15 @@ public class TicketMapper {
 
     public static de.thb.craftsquad.service.ticket.jooq.enums.Tag mapTag(Tag tag) {
         return switch (tag) {
-            case ELECTRICIAN -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.electrician;
+            case SANITARY -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.sanitary;
+            case WOOD -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.wood;
+            case METAL -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.metal;
+            case ELECTRIC -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.electric;
+            case MOVING -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.moving;
+            case PAINTER -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.painter;
+            case RENOVATION -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.renovation;
+            case GARDENING -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.gardening;
+            case MONTAGE -> de.thb.craftsquad.service.ticket.jooq.enums.Tag.montage;
         };
     }
 }
