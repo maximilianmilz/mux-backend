@@ -1,7 +1,7 @@
 package de.thb.craftsquad.controller;
 
 import de.thb.craftsquad.service.account.AccountService;
-import de.thb.craftsquad.service.account.jooq.tables.Account;
+import de.thb.craftsquad.service.account.model.Account;
 import de.thb.craftsquad.service.ticket.TicketService;
 import de.thb.craftsquad.service.ticket.model.Ticket;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ public class AccountController {
     })
     @GetMapping
     public List<Account> findAll() {
-        return null;
+        return List.of();
     }
 
     @Operation(summary = "Find account.")
@@ -42,7 +42,7 @@ public class AccountController {
     })
     @GetMapping("/{id}")
     public Account findById(@PathVariable String id) {
-        return null;
+        return Account.builder().build();
     }
 
     @Operation(summary = "Find projects of account.")
