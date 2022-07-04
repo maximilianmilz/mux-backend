@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>de.thb</groupId>
-    <artifactId>craftsquad-jooq-generator</artifactId>
+    <artifactId>crafted-jooq-generator</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Craftsquad jooq generator</name>
-    <description>Craftsuad jooq generator project</description>
+    <name>Crafted jooq generator</name>
+    <description>Crafted jooq generator project</description>
 
     <properties>
         <java.version>11</java.version>
@@ -62,7 +62,7 @@
                 <artifactId>jooq-codegen-maven</artifactId>
                 <executions>
                     <execution>
-                        <id>craftsquad-account-schema</id>
+                        <id>crafted-account-schema</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -84,14 +84,14 @@
                                     <javaTimeTypes>true</javaTimeTypes>
                                 </generate>
                                 <target>
-                                    <packageName>de.thb.craftsquad.service.account.jooq</packageName>
+                                    <packageName>de.crafted.api.service.account.jooq</packageName>
                                     <directory>../src/main/java</directory>
                                 </target>
                             </generator>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>craftsquad-ticket-schema</id>
+                        <id>crafted-ticket-schema</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -113,14 +113,14 @@
                                     <javaTimeTypes>true</javaTimeTypes>
                                 </generate>
                                 <target>
-                                    <packageName>de.thb.craftsquad.service.ticket.jooq</packageName>
+                                    <packageName>de.crafted.api.service.ticket.jooq</packageName>
                                     <directory>../src/main/java</directory>
                                 </target>
                             </generator>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>craftsquad-image-schema</id>
+                        <id>crafted-image-schema</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
@@ -142,7 +142,7 @@
                                     <javaTimeTypes>true</javaTimeTypes>
                                 </generate>
                                 <target>
-                                    <packageName>de.thb.craftsquad.service.image.jooq</packageName>
+                                    <packageName>de.crafted.api.service.image.jooq</packageName>
                                     <directory>../src/main/java</directory>
                                 </target>
                             </generator>
